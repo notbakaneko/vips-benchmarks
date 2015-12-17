@@ -6,8 +6,8 @@ uname -a
 convert --version
 ./ruby/versions/image_science.rb
 
-# how large an image do you want to process? 
-# sample2.v is 290x442 pixels ... replicate this many times horizontally and 
+# how large an image do you want to process?
+# sample2.v is 290x442 pixels ... replicate this many times horizontally and
 # vertically to get a highres image for the benchmark
 tile=10
 
@@ -26,15 +26,15 @@ if [ $? != 0 ]; then
   echo "build of test image failed -- out of disc space?"
   exit 1
 fi
-echo -n "test image is" `header -f width $tmp/t.v` 
-echo " by" `header -f height $tmp/t.v` "pixels"
+echo -n "test image is" `vipsheader -f width $tmp/t.v`
+echo " by" `vipsheader -f height $tmp/t.v` "pixels"
 
 echo making tiff and jpeg derivatives ...
 vips im_copy $tmp/t.v $tmp/t.tif
 vips im_copy $tmp/t.v $tmp/t.jpg
 
 # we want to use the time program, not the one built into the shell
-time=/usr/local/bin/time
+time=/usr/bin/time
 if [ $? != 0 ]; then
   echo "unable to locate 'time' program"
   exit 1
@@ -108,14 +108,14 @@ for prg in $programs; do
   echo " done"
 done
 
-echo 
+echo
 echo real time in seconds, fastest of three runs
 echo -e "benchmark\ttiff\tjpeg"
-sort -g -k 2 $tmp/log 
+sort -g -k 2 $tmp/log
 
-echo 
+echo
 echo peak memory use in bytes
 echo -e "benchmark\tpeak RSS"
-sort -g -k 2 $tmp/memlog 
+sort -g -k 2 $tmp/memlog
 
 rm -rf $tmp
